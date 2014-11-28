@@ -1,13 +1,13 @@
-#!/usr/bin/perl
+#!/usr/bin/perl -T
 use strict;
 use warnings;
 use CGI qw(:standard);
 use CGI::Carp qw(fatalsToBrowser);
-use Module::Metadata;
 use File::Find;
 use Fcntl qw(:DEFAULT :flock);
 
-use Data::Dumper;
+delete @ENV{ qw( IFS CDPATH ENV BASH_ENV ) };
+$ENV{PATH} = $1 if ($ENV{PATH} =~ /^(.+)$/);
 
 #------------------------------------------------------------------------------------#
 # Module services                                                                    #
@@ -19,9 +19,10 @@ if ($mname)
 {
 	print "Content-type: application/json\n\n";
 
-	my $module = Module::Metadata->new_from_module($mname, collect_pod => 1);
+    $mname = $1 if ($mname =~ /^(.+)$/);
+    my $version = (bless {}, $mname)->VERSION;
 
-	print "{ \"module\" : \"" . $module->{module} . "\", \"version\" : \"" . $module->{version} . "\"}";
+	print "{ \"module\" : \"" . $mname . "\", \"version\" : \"" . $version . "\"}";
 
 	exit;
 }
@@ -133,7 +134,7 @@ Content-type: text/html
 		<nav class="navbar navbar-default" role="navigation">
 			<div class="container">
 				<div class="navbar-header">
-					<a class="navbar-brand" href="#">Perl Development Resource</a>
+					<a class="navbar-brand" href="#">Perl Development Resources</a>
 				</div>
 			</div>
 		</nav>
@@ -296,7 +297,16 @@ sub GetInformation
 	push(@table, "\t\t\t\t<td>Perl Locations</td>");
 	{
 		my $locations = `whereis perl`;
-		$locations = ($locations) ? join('<br>', split(' ', $locations)) : "<i>not found</i>";
+		if ($locations)
+		{
+			my @locations = split(' ', $locations);
+			shift(@locations);
+			$locations = join("<br>", @locations);
+		}
+		else
+		{
+			$locations = "<i>not found</i>";
+		}
 
 		push(@table, "\t\t\t\t<td>$locations</td>");
 	}
@@ -308,7 +318,16 @@ sub GetInformation
 	push(@table, "\t\t\t\t<td>Sendmail Locations</td>");
 	{
 		my $locations = `whereis sendmail`;
-		$locations = ($locations) ? join('<br>', split(' ', $locations)) : "<i>not found</i>";
+		if ($locations)
+		{
+			my @locations = split(' ', $locations);
+			shift(@locations);
+			$locations = join("<br>", @locations);
+		}
+		else
+		{
+			$locations = "<i>not found</i>";
+		}
 
 		push(@table, "\t\t\t\t<td>$locations</td>");
 	}
