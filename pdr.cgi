@@ -1,4 +1,3 @@
-#!c:\lang\perl\bin\perl.exe -T
 #!/usr/bin/perl -T
 use strict;
 use warnings;
