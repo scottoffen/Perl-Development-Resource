@@ -1,3 +1,4 @@
+#!c:\lang\perl\bin\perl.exe -T
 #!/usr/bin/perl -T
 use strict;
 use warnings;
@@ -19,8 +20,8 @@ if ($mname)
 {
 	print "Content-type: application/json\n\n";
 
-    $mname = $1 if ($mname =~ /^(.+)$/);
-    my $version = (bless {}, $mname)->VERSION;
+	$mname = $1 if ($mname =~ /^(.+)$/);
+	my $version = (bless {}, $mname)->VERSION;
 
 	print "{ \"module\" : \"" . $mname . "\", \"version\" : \"" . $version . "\"}";
 
