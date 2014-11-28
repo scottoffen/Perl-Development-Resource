@@ -134,7 +134,7 @@ Content-type: text/html
 		<nav class="navbar navbar-default" role="navigation">
 			<div class="container">
 				<div class="navbar-header">
-					<a class="navbar-brand" href="#">Perl Development Resources</a>
+					<a class="navbar-brand" href="#">Perl Development Resource</a>
 				</div>
 			</div>
 		</nav>
