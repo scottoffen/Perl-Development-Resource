@@ -1,5 +1,4 @@
-#!c:\lang\perl\bin\perl.exe
-#!/usr/bin/perl -T
+#!/usr/bin/perl
 use strict;
 use warnings;
 use CGI qw(:standard);
