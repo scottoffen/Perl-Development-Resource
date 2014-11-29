@@ -5,4 +5,4 @@ A simple CGI script that provides information about the perl environment. Lots o
 
 Lists information about the system Perl is working on as well as all the Perl environment variables (so it make a great test script to GET/POST data to). Additionally lists out all installed Perl modules. Click on a module to see the installed version.
 
->Use jQuery and Bootstrap; both are loaded via CDNs, so you don't need to worry about any dependencies.
+>Uses jQuery and Bootstrap; both are loaded via CDNs, so you don't need to worry about any dependencies.
