@@ -1,3 +1,4 @@
+#!c:\lang\perl\bin\perl.exe -T
 #!/usr/bin/perl -T
 use strict;
 use warnings;
@@ -5,6 +6,7 @@ use CGI qw(:standard);
 use CGI::Carp qw(fatalsToBrowser);
 use File::Find;
 use Fcntl qw(:DEFAULT :flock);
+use Module::Load;
 
 delete @ENV{ qw( IFS CDPATH ENV BASH_ENV ) };
 $ENV{PATH} = $1 if ($ENV{PATH} =~ /^(.+)$/);
@@ -13,16 +15,17 @@ $ENV{PATH} = $1 if ($ENV{PATH} =~ /^(.+)$/);
 # Module services                                                                    #
 #------------------------------------------------------------------------------------#
 my $query = new CGI();
-my $mname = $query->param('m');
-
-if ($mname)
+my $package = $query->param('m');
+if ($package)
 {
 	print "Content-type: application/json\n\n";
 
-	$mname = $1 if ($mname =~ /^(.+)$/);
-	my $version = (bless {}, $mname)->VERSION;
+	$package = $1 if ($package =~ /^(.+)$/);
+	load $package;
 
-	print "{ \"module\" : \"" . $mname . "\", \"version\" : \"" . $version . "\"}";
+	my $version = eval '$' . $package . '::VERSION';	
+
+	print "{ \"module\" : \"" . $package . "\", \"version\" : \"" . $version . "\"}";
 
 	exit;
 }
@@ -118,6 +121,7 @@ Content-type: text/html
 
 				if (version === undefined)
 				{
+				    jQuery(this).attr('data-version', 'n/a');
 					var el = this;
 
 					jQuery.get("$ENV{SCRIPT_NAME}?m=" + this.title, function (data)
