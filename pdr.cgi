@@ -1,4 +1,3 @@
-#!c:\lang\perl\bin\perl.exe -T
 #!/usr/bin/perl -T
 use strict;
 use warnings;
@@ -23,7 +22,7 @@ if ($package)
 	$package = $1 if ($package =~ /^(.+)$/);
 	load $package;
 
-	my $version = eval '$' . $package . '::VERSION';	
+	my $version = eval '$' . $package . '::VERSION';
 
 	print "{ \"module\" : \"" . $package . "\", \"version\" : \"" . $version . "\"}";
 
@@ -286,8 +285,16 @@ sub GetInformation
 
 	#-- Perl Version --#
 	push(@table, "\t\t\t<tr>");
-	push(@table, "\t\t\t\t<td><span title='\$^V'>Perl Version</span></td>");
-	push(@table, "\t\t\t\t<td>$^V</td>");
+	push(@table, "\t\t\t\t<td><span title='\$] or \$^V'>Perl Version</span></td>");
+	my $version = ($^V) ? sprintf("v%vd", $^V) : $];
+	{
+		unless ($version)
+		{
+			my $verinfo = `perl -v`;
+			$version = $1 if ($verinfo =~ /v(\d{1,2}\.\d{1,4}\.\d{1,4})/);
+		}
+	}
+	push(@table, "\t\t\t\t<td>$version</td>");
 	push(@table, "\t\t\t</tr>");
 
 	#-- @INC --#
